@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "name": "test",
+        "password": "qRdhGIXx",
+        "date": "2026-11-10 11:59:24",
+        "type": "rpg",
+        "id": "f45fc3d6-0c5a-40dc-b793-c74a35ce0c44"
+    },
+    {
+        "name": "test 2",
+        "password": "43336252",
+        "date": "2026-11-10 11:59:41",
+        "type": "pin",
+        "id": "dd6bc04b-94a6-48ff-b486-f4b8bdce0d26"
+    }
+]
