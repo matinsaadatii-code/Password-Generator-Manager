@@ -191,93 +191,86 @@ class RandomPasswordGenerator(PasswordGenerator):
 # MEMORABLE PASSWORD GENERATOR (UNDER DEVELOPMENT)
 # ============================================================
 
-# class MemorablePasswordGenerator(PasswordGenerator):
-#     """
-#     Generate memorable passwords using randomly selected words.
-#
-#     This generator combines multiple dictionary words using
-#     a configurable separator.
-#
-#     :param no_of_words: Number of words used in the password.
-#         Defaults to ``5``.
-#     :type no_of_words: int
-#
-#     :param separator: String used to separate selected words.
-#         Defaults to ``'-'``.
-#     :type separator: str
-#
-#     :param capitalization: Whether selected words should be capitalized.
-#     :type capitalization: bool
-#
-#     :param vocabulary: Custom list of words. If ``None``, the
-#         NLTK words corpus is used.
-#     :type vocabulary: list[str] or None
-#
-#     :ivar no_of_words: Configured number of words.
-#     :vartype no_of_words: int
-#
-#     :ivar separator: Word separator.
-#     :vartype separator: str
-#
-#     :ivar capitalization: Capitalization setting.
-#     :vartype capitalization: bool
-#
-#     :ivar vocabulary: Available words for password generation.
-#     :vartype vocabulary: list[str]
-#     """
-#
-#     def __init__(
-#         self,
-#         no_of_words: int = 5,
-#         separator: str = '-',
-#         capitalization: bool = False,
-#         vocabulary: Optional[list[str]] = None
-#     ) -> None:
-#         """
-#         Initialize the memorable password generator.
-#
-#         :param no_of_words: Number of words to combine.
-#         :type no_of_words: int
-#
-#         :param separator: Separator between selected words.
-#         :type separator: str
-#
-#         :param capitalization: Capitalize selected words if enabled.
-#         :type capitalization: bool
-#
-#         :param vocabulary: Custom vocabulary or ``None`` to use NLTK.
-#         :type vocabulary: list[str] or None
-#         """
-#
-#         if vocabulary is None:
-#             vocabulary = nltk.corpus.words.words()
-#
-#         self.no_of_words: int = no_of_words
-#         self.separator: str = separator
-#         self.capitalization: bool = capitalization
-#         self.vocabulary: list[str] = vocabulary
-#
-#     def generate(self) -> str:
-#         """
-#         Generate a memorable password from randomly selected words.
-#
-#         :return: A password consisting of randomly selected words.
-#         :rtype: str
-#         """
-#
-#         selected_words: list[str] = [
-#             secrets.choice(self.vocabulary)
-#             for _ in range(self.no_of_words)
-#         ]
-#
-#         # Capitalize selected words if the option is enabled.
-#         if self.capitalization:
-#             selected_words = [
-#                 word.capitalize()
-#                 for word in selected_words
-#             ]
-#
-#         return self.separator.join(selected_words)
+class MemorablePasswordGenerator(PasswordGenerator):
+    """
+    Generate memorable passwords using randomly selected words.
+
+    This generator combines multiple dictionary words using
+    a configurable separator.
+
+    :param no_of_words: Number of words used in the password.
+        Defaults to ``5``.
+    :type no_of_words: int
+
+    :param separator: String used to separate selected words.
+        Defaults to ``'-'``.
+    :type separator: str
+
+    :param capitalization: Whether selected words should be capitalized.
+    :type capitalization: bool
+
+    :param vocabulary: Custom list of words. If ``None``, the
+        NLTK words corpus is used.
+    :type vocabulary: list[str] or None
+
+    :ivar no_of_words: Configured number of words.
+    :vartype no_of_words: int
+
+    :ivar separator: Word separator.
+    :vartype separator: str
+
+    :ivar capitalization: Capitalization setting.
+    :vartype capitalization: bool
+
+    :ivar vocabulary: Available words for password generation.
+    :vartype vocabulary: list[str]
+    """
+
+    def __init__(
+        self,
+        number_of_words: int = 4,
+        separator: str = '-',
+        capitalization: bool = False,
+        vocabulary: Optional[list[str]] = None
+    ) -> None:
+        """
+        Initialize the memorable password generator.
+
+        :param no_of_words: Number of words to combine.
+        :type number_of_words: int
+
+        :param separator: Separator between selected words.
+        :type separator: str
+
+        :param capitalization: Capitalize selected words if enabled.
+        :type capitalization: bool
+
+        :param vocabulary: Custom vocabulary or ``None`` to use NLTK.
+        :type vocabulary: list[str] or None
+        """
+
+        if vocabulary is None:
+            vocabulary = nltk.corpus.words.words()
+
+        self.number_of_words: int = number_of_words
+        self.separator: str = separator
+        self.capitalization: bool = capitalization
+        self.vocabulary: list[str] = vocabulary
+
+    def generate(self) -> str:
+        """
+        Generate a memorable password from randomly selected words.
+
+        :return: A password consisting of randomly selected words.
+        :rtype: str
+        """
+
+        return self.separator.join(
+            secrets.choice(self.vocabulary).capitalize() 
+            if self.capitalization
+            else secrets.choice(self.vocabulary)
+            for _ in range(self.number_of_words)
+        )
 
 
 # ============================================================

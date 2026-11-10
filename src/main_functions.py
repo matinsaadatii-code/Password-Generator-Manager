@@ -28,7 +28,7 @@ Dependencies:
     JSON file operations are implemented separately in ``helpers.py``.
 """
 
-import helpers
+from src import helpers
 
 from collections.abc import Callable
 from typing import Any

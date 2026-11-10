@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Mail",
+        "password": "aaaaaaaa",
+        "date": "2026-11-10 17:42:32",
+        "type": "rpg",
+        "id": "6740360f-5624-4e4f-858c-e1458f202bbc"
+    },
+    {
+        "name": "Mail",
+        "password": "aaaaaaaa",
+        "date": "2026-11-10 17:43:35",
+        "type": "rpg",
+        "id": "01cfd6ab-418a-4ebf-8880-9e3f75476442"
+    },
+    {
+        "name": "Mail",
+        "password": "aaaaaaaa",
+        "date": "2026-11-10 17:43:50",
+        "type": "rpg",
+        "id": "03db206b-680a-4146-adc3-e3e5dc2dec26"
+    },
+    {
+        "name": "Mail",
+        "password": "aaaaaaaa",
+        "date": "2026-11-10 17:44:12",
+        "type": "rpg",
+        "id": "85dfd1d1-825a-46e8-8e34-b4f255e80790"
+    }
+]
