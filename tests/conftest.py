@@ -4,7 +4,7 @@ import types
 
 import pytest
 
-# from src import helpers
+from src import helpers
 
 # Add the project root to sys.path so `from src.xxx import ...` works.
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +22,7 @@ except ImportError:
 @pytest.fixture
 def data_file(tmp_path, monkeypatch):
     """Point helpers.DATA_PATH to a temporary JSON file (not created yet)."""
-    from src import helpers
+    # from src import helpers
 
     path = tmp_path / "data.json"
     monkeypatch.setattr(helpers, "DATA_PATH", str(path))
@@ -70,6 +70,12 @@ def data_file(tmp_path, monkeypatch):
     """Point helpers.DATA_PATH to a temporary JSON file (not created yet)."""
     from src import helpers
 
+    path = tmp_path / "data.json"
+    monkeypatch.setattr(helpers, "DATA_PATH", str(path))
+    return path
+
+@pytest.fixture(autouse=True)
+def tmp_data(tmp_path, monkeypatch):
     path = tmp_path / "data.json"
     monkeypatch.setattr(helpers, "DATA_PATH", str(path))
     return path

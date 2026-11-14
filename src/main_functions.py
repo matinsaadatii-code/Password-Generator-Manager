@@ -28,6 +28,7 @@ Dependencies:
     JSON file operations are implemented separately in ``helpers.py``.
 """
 
+
 from src import helpers
 
 from collections.abc import Callable
@@ -142,7 +143,6 @@ def search_items(pass_type: str) -> None:
     # Display the details of each matching record.
     for item in results:
         helpers.print_item(item)
-
 
 # ============================================================
 # LIST OPERATIONS

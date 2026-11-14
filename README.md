@@ -8,57 +8,67 @@
 
 ## Description
 
-A command-line password generator built with Python.
+A web-based password generator built with Python and [Streamlit](https://streamlit.io).
 
-This project generates random passwords, numeric PIN codes, and JWT secret keys using Python's `secrets` module. It also provides functionality to save, search, list, edit, and delete generated values.
+This project generates random passwords, memorable passwords (planned), numeric PIN codes, and JWT secret keys using Python's `secrets` module. Generated values can be saved with a custom name, then searched, listed, renamed, edited, regenerated, and deleted from a browser interface.
 
-The project is designed with an object-oriented structure and separates password generation, data management, and application logic into different modules.
+The project is designed with an object-oriented structure and separates password generation, data management, and the user interface into different modules.
 
 ## Features
 
 ### Password Generation
 
 - Generate random passwords.
-- Customize password length.
+- Customize password length (1 to 1000 characters).
 - Include or exclude numbers.
-- Include or exclude special characters.
+- Include or exclude symbols.
 - Use Python's `secrets` module for secure random selection.
 
 ### PIN Code Generation
 
 - Generate numeric PIN codes.
-- Customize PIN length.
+- Customize PIN length (1 to 100 digits).
 - Use secure random selection instead of the standard `random` module.
 
 ### JWT Secret Generation
 
 - Generate secret keys for signing JSON Web Tokens.
-- Customize the length (in bits).
+- Customize the length in bits (8 to 512, in steps of 8).
 - Choose the output encoding: `hex`, `urlsafe`, `bytes`, or `custom`.
-- The `custom` encoding supports letters, with optional numbers and symbols.
+- The `custom` encoding supports letters, with optional numbers and symbols. The number and symbol options are disabled for the other encodings.
 
 ### Memorable Password Generation
 
 - A memorable password generator is planned.
-- The implementation is currently under development.
+- The interface already includes controls for number of words, separator, and capitalization, but the generator is under development.
 
 ### Password Management
 
-- Save generated passwords, PIN codes, and JWT secrets.
-- Assign a custom name to each saved item.
-- Search saved items by name, ID, or value.
-- Display saved items.
-- Edit existing records.
-- Generate a new value for an existing record.
-- Delete saved records.
+- Save generated passwords, PIN codes, and JWT secrets with a custom name.
+- Search saved items by name (case-insensitive partial match), by ID (exact match), or by value (exact match).
+- List all saved items of the selected type.
+- Rename existing records.
+- Manually set a new value for an existing record.
+- Generate a new value for an existing record using the current generator settings.
+- Delete saved records, after confirming with a checkbox.
 - Store records in a JSON file.
+
+## Graphical User Interface
+
+The application runs in the browser. The interface has three parts:
+
+- **Sidebar:** A radio button list to select the type: *Random Password*, *Memorable Password*, *Pin Code*, or *JWT Secret*.
+- **Generate tab:** Settings for the selected type, a **Generate** button, a display of the generated value, and a name field with a **Save** button.
+- **Saved tab:** A search area with a *Search by* option (*Name*, *Id*, or *Password/Pin*), a list of saved items of the selected type shown as expandable cards, and per-item actions.
+
+The last generated value is kept for each type while the session is open. Switching types does not mix values between types.
 
 ## Project Structure
 
 ```text
 Password-Generator/
 │
-├── main.py
+├── app.py
 ├── pass_classes.py
 ├── helpers.py
 ├── main_functions.py
@@ -72,10 +82,10 @@ Password-Generator/
 
 | File | Description |
 |---|---|
-| `main.py` | Application entry point and command-line menus. |
+| `app.py` | Streamlit web interface: sidebar, Generate tab, and Saved tab. |
 | `pass_classes.py` | Generator classes: `RandomPasswordGenerator`, `MemorablePasswordGenerator`, `PinCodeGenerator`, `JWTSecretGenerator`, and the abstract base class `PasswordGenerator`. |
-| `helpers.py` | JSON file handling, timestamps, and data management utilities. |
-| `main_functions.py` | Search, list, edit, and delete operations. |
+| `helpers.py` | JSON file handling (`load_items`, `save_items`, `save_item`, `get_items_by_type`), timestamps, and data management utilities. |
+| `main_functions.py` | Update operations for saved records (`update_item`), used for renaming, changing values, and regenerating. |
 | `data.json` | Stores saved passwords, PIN codes, and JWT secrets. |
 | `.env` | Contains environment-specific configuration, such as the data file path. |
 
@@ -83,6 +93,7 @@ Password-Generator/
 
 - Python 3.10 or newer (for the type annotation syntax used in the project, such as `str | bytes` and `list[str]`).
 - Required Python packages:
+  - `streamlit`
   - `python-dotenv`
   - `nltk` (used by the planned memorable password generator)
 
@@ -123,7 +134,7 @@ source .venv/bin/activate
 **4. Install dependencies**
 
 ```bash
-pip install python-dotenv nltk
+pip install streamlit python-dotenv nltk
 ```
 
 **5. (Optional) Download the NLTK words corpus**
@@ -159,57 +170,65 @@ If `DATA_PATH` is not defined, the application uses `data.json` by default.
 Run the application from the project directory:
 
 ```bash
-python main.py
+streamlit run app.py
 ```
 
-The main menu provides the following options:
+Streamlit prints a local address (by default `http://localhost:8501`). Open it in your browser.
 
-```text
-==Password Generator==
-1. Random Password Generator (RPG)
-2. Memorable Password Generator (MPG)
-3. Pin Code Generator (PCG)
-4. JWT Secret Generator (JSG)
-5. Exit
---------------------------------------------------
-```
+### Selecting a Type
 
-### 1. Random Password Generator (RPG)
+Use the **Select Password type** radio button in the sidebar to choose a generator. The Generate and Saved tabs update to match the selected type.
 
-The random password generator allows you to:
+### 1. Random Password
 
-- Enable numbers.
-- Enable special characters.
-- Change password length.
-- Display the generated password.
-- Save the password.
-- Search, list, edit, and delete saved passwords.
+In the **Generate** tab:
 
-### 2. Memorable Password Generator (MPG)
+- Set the length with the **Select length** slider (1 to 1000).
+- Turn on **Include Symbols** and/or **Include Numbers**.
+- Click **Generate** to create a password.
 
-This feature is currently under development and is not fully available. The menu includes options for capitalization, separator, and number of words, but the generator is not complete.
+### 2. Memorable Password
 
-### 3. Pin Code Generator (PCG)
+This feature is currently under development. The controls (**Select number of words**, **Separator**, and **Capitalization**) are present, but the generator is not complete.
 
-The PIN code generator allows you to:
+### 3. Pin Code
 
-- Change PIN length.
-- Generate a numeric PIN.
-- Save the PIN.
-- Search, list, edit, and delete saved PIN codes.
+In the **Generate** tab:
 
-### 4. JWT Secret Generator (JSG)
+- Set the number of digits with the **Select length** slider (1 to 100).
+- Click **Generate** to create a PIN.
 
-The JWT secret generator allows you to:
+### 4. JWT Secret
 
-- Enable numbers and symbols (for the `custom` encoding).
-- Change the secret length in bits.
-- Change the encoding (`hex`, `urlsafe`, `bytes`, or `custom`).
-- Display the generated secret.
-- Save the secret.
-- Search, list, edit, and delete saved JWT secrets.
+In the **Generate** tab:
 
-For HMAC-SHA256 signing, use at least 256 bits (`length = 256`), as recommended by RFC 7518.
+- Set the length in bits with the **Select length (bits)** slider (8 to 512, default 256).
+- Choose an **Encoding**: `hex`, `urlsafe`, `bytes`, or `custom`.
+- For the `custom` encoding only, turn on **Include Symbols** and/or **Include Numbers**.
+- Click **Generate** to create a secret.
+
+For HMAC-SHA256 signing, use at least 256 bits, as recommended by RFC 7518.
+
+### Saving a Generated Value
+
+After a value is generated, it appears in a code box below the **Generate** button. To save it:
+
+1. Enter a name in **Enter your Password name**. The name cannot be empty.
+2. Click **Save**.
+
+### Managing Saved Items
+
+In the **Saved** tab:
+
+1. Optionally, choose a **Search by** option (*Name*, *Id*, or *Password/Pin*) and type a query. Leave the query empty to list all items of the selected type.
+2. Click an item to expand it. Each item shows its value, its ID, and its last update time (if it has been updated).
+3. Use the actions inside the item:
+   - **Change name:** Enter a new name in **New name**, then click **Change name**.
+   - **Change value:** Enter a value in **New password/pin**, then click **Change value**.
+   - **Generate a new one:** Click **Generate a new one** to replace the value with a new one, using the settings in the **Generate** tab.
+   - **Delete:** Tick **Confirm delete**, then click **Delete**. The button stays disabled until the checkbox is ticked.
+
+**Note:** *Generate a new one* uses the settings currently shown in the **Generate** tab, not the settings used when the record was created.
 
 ## Data Storage
 
@@ -227,20 +246,23 @@ A record has the following structure:
 }
 ```
 
+Records that have been changed also contain an `updated` field with the time of the last update.
+
 The `type` field identifies the record category:
 
 | Type | Description |
 |---|---|
-| `RPG` | Random Password Generator |
-| `MPG` | Memorable Password Generator |
-| `PCG` | PIN Code Generator |
-| `JWT` | JWT Secret Generator |
+| `RPG` | Random Password |
+| `MPG` | Memorable Password |
+| `PCG` | Pin Code |
+| `JWT` | JWT Secret |
 
 Each record receives a unique ID generated using Python's `uuid` module.
 
 ## Technologies
 
 - **Python**: Main programming language.
+- **Streamlit**: Web user interface.
 - **OOP**: Object-oriented programming and abstract classes.
 - **Secrets**: Cryptographically strong random selection.
 - **JSON**: Data serialization and storage.
@@ -259,6 +281,7 @@ This project is intended for learning and personal experimentation. It is not a 
 - Do not use this project to store real or sensitive account passwords or production signing keys.
 - Avoid committing `.env` files or generated credential data to a public repository.
 - The `secrets` module provides secure random generation, but it does not encrypt stored data.
+- The Streamlit server is intended for local use. If you make it reachable from a network, anyone who can open the page can view and change the saved data.
 
 ## License
 

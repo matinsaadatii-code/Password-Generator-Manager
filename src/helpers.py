@@ -277,5 +277,3 @@ def print_item(item: Item) -> None:
     # Display the unique record identifier.
     print(f'ID: {item["id"]}')
 
-    # Print a separator after displaying the record.
-    print("-" * 50)
